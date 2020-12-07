@@ -1,0 +1,1 @@
+# linkswap-info
