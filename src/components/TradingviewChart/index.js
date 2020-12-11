@@ -129,7 +129,7 @@ const TradingViewChart = ({
       var series =
         type === CHART_TYPES.BAR
           ? chart.addHistogramSeries({
-              color: '#ff007a',
+              color: '#135ce3',
               priceFormat: {
                 type: 'volume',
               },
@@ -141,9 +141,9 @@ const TradingViewChart = ({
               lineWidth: 3,
             })
           : chart.addAreaSeries({
-              topColor: '#ff007a',
-              bottomColor: 'rgba(255, 0, 122, 0)',
-              lineColor: '#ff007a',
+              topColor: '#135ce3',
+              bottomColor: 'rgba(19, 92, 207, 0)',
+              lineColor: '#135ce3',
               lineWidth: 3,
             })
 
