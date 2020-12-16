@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useMemo, useCallback, useEffect } from 'react'
 
-const UNISWAP = 'LINKSWAP'
+const LINKSWAP = 'LINKSWAP'
 
 const VERSION = 'VERSION'
 const CURRENT_VERSION = 0
@@ -52,7 +52,7 @@ function init() {
   }
 
   try {
-    const parsed = JSON.parse(window.localStorage.getItem(UNISWAP))
+    const parsed = JSON.parse(window.localStorage.getItem(LINKSWAP))
     if (parsed[VERSION] !== CURRENT_VERSION) {
       // this is where we could run migration logic
       return defaultLocalStorage
@@ -82,7 +82,7 @@ export function Updater() {
   const [state] = useLocalStorageContext()
 
   useEffect(() => {
-    window.localStorage.setItem(UNISWAP, JSON.stringify({ ...state, [LAST_SAVED]: Math.floor(Date.now() / 1000) }))
+    window.localStorage.setItem(LINKSWAP, JSON.stringify({ ...state, [LAST_SAVED]: Math.floor(Date.now() / 1000) }))
   })
 
   return null
@@ -116,20 +116,25 @@ export function useSavedAccounts() {
   const [state, { updateKey }] = useLocalStorageContext()
   const savedAccounts = state?.[SAVED_ACCOUNTS]
 
-  function addAccount(account) {
-    let newAccounts = state?.[SAVED_ACCOUNTS]
-    newAccounts.push(account)
-    updateKey(SAVED_ACCOUNTS, newAccounts)
-  }
+  const addAccount = useCallback(
+    (account) => {
+      updateKey(SAVED_ACCOUNTS, [...(savedAccounts ?? []), account])
+    },
+    [savedAccounts, updateKey]
+  )
 
-  function removeAccount(account) {
-    let newAccounts = state?.[SAVED_ACCOUNTS]
-    let index = newAccounts.indexOf(account)
-    if (index > -1) {
-      newAccounts.splice(index, 1)
-    }
-    updateKey(SAVED_ACCOUNTS, newAccounts)
-  }
+  const removeAccount = useCallback(
+    (account) => {
+      let index = savedAccounts?.indexOf(account) ?? -1
+      if (index > -1) {
+        updateKey(SAVED_ACCOUNTS, [
+          ...savedAccounts.slice(0, index),
+          ...savedAccounts.slice(index + 1, savedAccounts.length),
+        ])
+      }
+    },
+    [savedAccounts, updateKey]
+  )
 
   return [savedAccounts, addAccount, removeAccount]
 }

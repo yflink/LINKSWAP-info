@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useUserTransactions, useUserPositions, useMiningPositions } from '../contexts/User'
 import TxnList from '../components/TxnList'
@@ -20,6 +20,7 @@ import { FEE_WARNING_TOKENS } from '../constants'
 import { BasicLink } from '../components/Link'
 import { useMedia } from 'react-use'
 import Search from '../components/Search'
+import { useSavedAccounts } from '../contexts/LocalStorage'
 
 const AccountWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.2);
@@ -100,8 +101,8 @@ function AccountPage({ account }) {
   let totalSwappedUSD = useMemo(() => {
     return transactions?.swaps
       ? transactions?.swaps.reduce((total, swap) => {
-          return total + parseFloat(swap.amountUSD)
-        }, 0)
+        return total + parseFloat(swap.amountUSD)
+      }, 0)
       : 0
   }, [transactions])
 
@@ -134,12 +135,12 @@ function AccountPage({ account }) {
   const positionValue = useMemo(() => {
     return dynamicPositions
       ? dynamicPositions.reduce((total, position) => {
-          return (
-            total +
-            (parseFloat(position?.liquidityTokenBalance) / parseFloat(position?.pair?.totalSupply)) *
-              position?.pair?.reserveUSD
-          )
-        }, 0)
+        return (
+          total +
+          (parseFloat(position?.liquidityTokenBalance) / parseFloat(position?.pair?.totalSupply)) *
+          position?.pair?.reserveUSD
+        )
+      }, 0)
       : null
   }, [dynamicPositions])
 
@@ -151,6 +152,13 @@ function AccountPage({ account }) {
   }, [])
 
   const below600 = useMedia('(max-width: 600px)')
+
+  // adding/removing account from saved accounts
+  const [savedAccounts, addAccount, removeAccount] = useSavedAccounts()
+  const isBookmarked = savedAccounts.includes(account)
+  const handleBookmarkClick = useCallback(() => {
+    ; (isBookmarked ? removeAccount : addAccount)(account)
+  }, [account, isBookmarked, addAccount, removeAccount])
 
   return (
     <PageWrapper>
@@ -175,7 +183,10 @@ function AccountPage({ account }) {
             </span>
             <AccountWrapper>
               <StyledIcon>
-                <Bookmark style={{ opacity: 0.4 }} />
+                <Bookmark
+                  onClick={handleBookmarkClick}
+                  style={{ opacity: isBookmarked ? 0.8 : 0.4, cursor: 'pointer' }}
+                />
               </StyledIcon>
             </AccountWrapper>
           </RowBetween>
@@ -262,8 +273,8 @@ function AccountPage({ account }) {
                       {positionValue
                         ? formattedNum(positionValue, true)
                         : positionValue === 0
-                        ? formattedNum(0, true)
-                        : '-'}
+                          ? formattedNum(0, true)
+                          : '-'}
                     </TYPE.header>
                   </RowFixed>
                 </AutoColumn>
@@ -287,8 +298,8 @@ function AccountPage({ account }) {
                 {activePosition ? (
                   <PairReturnsChart account={account} position={activePosition} />
                 ) : (
-                  <UserChart account={account} position={activePosition} />
-                )}
+                    <UserChart account={account} position={activePosition} />
+                  )}
               </Panel>
             </PanelWrapper>
           )}

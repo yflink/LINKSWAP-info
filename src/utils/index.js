@@ -38,44 +38,59 @@ export function getTimeframe(timeWindow) {
 }
 
 export function getPoolLink(token0Address, token1Address = null, remove = false) {
+
+  let action = remove ? `remove` : `add`
+  let inputCurrency = null
+  let outputCurrency = null
+
   if (!token1Address) {
-    return (
-      `https://uniswap.exchange/` +
-      (remove ? `remove` : `add`) +
-      `/${token0Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token0Address}/${'ETH'}`
-    )
+    inputCurrency = 'ETH'
+    outputCurrency = token0Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token0Address
   } else {
-    return (
-      `https://uniswap.exchange/` +
-      (remove ? `remove` : `add`) +
-      `/${token0Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token0Address}/${
-        token1Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token1Address
-      }`
-    )
+    inputCurrency = token0Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token0Address
+    outputCurrency = token1Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token1Address
   }
+
+  if (outputCurrency === 'ETH') {
+    outputCurrency = inputCurrency
+    inputCurrency = 'ETH'
+  }
+
+  return `https://linkswap.app/#/${action}/${inputCurrency}/${outputCurrency}`
 }
 
 export function getSwapLink(token0Address, token1Address = null) {
+
+  let queryString = null
   if (!token1Address) {
-    return `https://uniswap.exchange/swap?inputCurrency=${token0Address}`
+    queryString = `outputCurrency=${token0Address}`
   } else {
-    return `https://uniswap.exchange/swap?inputCurrency=${
-      token0Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token0Address
-    }&outputCurrency=${token1Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token1Address}`
+
+    let inputCurrency = token0Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token0Address
+    let outputCurrency = token1Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token1Address
+
+    if (outputCurrency === 'ETH') {
+      outputCurrency = inputCurrency
+      inputCurrency = 'ETH'
+    }
+
+    queryString = `inputCurrency=${inputCurrency}&outputCurrency=${outputCurrency}`
   }
+
+  return `https://linkswap.app/#/swap?${queryString}`
 }
 
 export function getMiningPoolLink(token0Address) {
-  return `https://app.uniswap.org/#/uni/ETH/${token0Address}`
+  return `https://linkswap.app/#/add/ETH/${token0Address}`
 }
 
-export function getUniswapAppLink(linkVariable) {
-  let baseUniswapUrl = 'https://app.uniswap.org/#/uni'
+export function getLinkswapAppLink(linkVariable) {
+  let baseLinkswapUrl = 'https://linkswap.app'
   if (!linkVariable) {
-    return baseUniswapUrl
+    return baseLinkswapUrl
   }
 
-  return `${baseUniswapUrl}/ETH/${linkVariable}`
+  return `${baseLinkswapUrl}/ETH/${linkVariable}`
 }
 
 export function localNumber(val) {
