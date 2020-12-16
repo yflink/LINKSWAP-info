@@ -65,11 +65,11 @@ function GlobalPage() {
 
   return (
     <PageWrapper>
-      <ThemedBackground backgroundColor={transparentize(0.8, '#ff007a')} />
+      <ThemedBackground backgroundColor={transparentize(0.8, '#295bdb')} />
       <ContentWrapper>
         <div>
           <AutoColumn gap="24px" style={{ paddingBottom: below800 ? '0' : '24px' }}>
-            <TYPE.largeHeader>{below800 ? 'Protocol Analytics' : 'LinkSwap Protocol Analytics'}</TYPE.largeHeader>
+            <TYPE.largeHeader>{below800 ? 'Protocol Analytics' : 'Linkswap Protocol Analytics'}</TYPE.largeHeader>
             <Search />
             <GlobalStats />
           </AutoColumn>

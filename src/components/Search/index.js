@@ -10,7 +10,7 @@ import { useAllTokenData, useTokenData } from '../../contexts/TokenData'
 import { useAllPairData, usePairData } from '../../contexts/PairData'
 import DoubleTokenLogo from '../DoubleLogo'
 import { useMedia } from 'react-use'
-import { useAllPairsInUniswap, useAllTokensInUniswap } from '../../contexts/GlobalData'
+import { useAllPairsInLinkswap, useAllTokensInLinkswap } from '../../contexts/GlobalData'
 import { OVERVIEW_TOKEN_BLACKLIST, PAIR_BLACKLIST } from '../../constants'
 
 import { transparentize } from 'polished'
@@ -151,10 +151,10 @@ const Blue = styled.span`
 `
 
 export const Search = ({ small = false }) => {
-  let allTokens = useAllTokensInUniswap()
+  let allTokens = useAllTokensInLinkswap()
   const allTokenData = useAllTokenData()
 
-  let allPairs = useAllPairsInUniswap()
+  let allPairs = useAllPairsInLinkswap()
   const allPairData = useAllPairData()
 
   const [showMenu, toggleMenu] = useState(false)
@@ -437,10 +437,10 @@ export const Search = ({ small = false }) => {
               : below410
                 ? 'Search...'
                 : below470
-                  ? 'Search LinkSwap...'
+                  ? 'Search Linkswap...'
                   : below700
                     ? 'Search pairs and tokens...'
-                    : 'Search LinkSwap pairs and tokens...'
+                    : 'Search Linkswap pairs and tokens...'
           }
           value={value}
           onChange={(e) => {
