@@ -3,10 +3,10 @@ name: Lint
 on:
   push:
     branches:
-      - v2
+      - main
   pull_request_target:
     branches:
-      - v2
+      - main
 
 jobs:
   run-linters:
@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@main
 
       - name: Set up node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@main
         with:
           node-version: 12
           always-auth: true
@@ -29,7 +29,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Node dependency cache
-        uses: actions/cache@v1
+        uses: actions/cache@main
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: yarn-${{ hashFiles('**/yarn.lock') }}
