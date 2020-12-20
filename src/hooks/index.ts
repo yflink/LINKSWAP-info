@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import copy from 'copy-to-clipboard'
 
 export function useColor(tokenAddress, token) {
-
   return '#2172E5'
 }
 
