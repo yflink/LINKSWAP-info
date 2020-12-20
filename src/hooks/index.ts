@@ -1,14 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { shade } from 'polished'
-import Vibrant from 'node-vibrant'
-import { hex } from 'wcag-contrast'
-import { isAddress } from '../utils'
 import copy from 'copy-to-clipboard'
 
 export function useColor(tokenAddress, token) {
-
-  const [color, setColor] = useState('#2172E5')
-  return color
+  return '#2172E5'
 }
 
 export function useCopyClipboard(timeout = 500) {
