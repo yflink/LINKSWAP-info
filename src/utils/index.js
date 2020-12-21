@@ -38,7 +38,6 @@ export function getTimeframe(timeWindow) {
 }
 
 export function getPoolLink(token0Address, token1Address = null, remove = false) {
-
   let action = remove ? `remove` : `add`
   let inputCurrency = null
   let outputCurrency = null
@@ -60,12 +59,10 @@ export function getPoolLink(token0Address, token1Address = null, remove = false)
 }
 
 export function getSwapLink(token0Address, token1Address = null) {
-
   let queryString = null
   if (!token1Address) {
     queryString = `outputCurrency=${token0Address}`
   } else {
-
     let inputCurrency = token0Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token0Address
     let outputCurrency = token1Address === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' ? 'ETH' : token1Address
 
@@ -340,11 +337,15 @@ export const formatNumber = (num) => {
 }
 
 // using a currency library here in case we want to add more in future
-var priceFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-})
+export const formatDollarAmount = (num, digits) => {
+  const formatter = new Intl.NumberFormat([], {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  })
+  return formatter.format(num)
+}
 
 export const toSignificant = (number, significantDigits) => {
   Decimal.set({ precision: significantDigits + 1, rounding: Decimal.ROUND_UP })
@@ -374,21 +375,18 @@ export const formattedNum = (number, usd = false, acceptNegatives = false) => {
   }
 
   if (num > 1000) {
-    return usd
-      ? '$' + Number(parseFloat(num).toFixed(0)).toLocaleString()
-      : '' + Number(parseFloat(num).toFixed(0)).toLocaleString()
+    return usd ? formatDollarAmount(num, 0) : Number(parseFloat(num).toFixed(0)).toLocaleString()
   }
 
   if (usd) {
     if (num < 0.1) {
-      return '$' + Number(parseFloat(num).toFixed(4))
+      return formatDollarAmount(num, 4)
     } else {
-      let usdString = priceFormatter.format(num)
-      return '$' + usdString.slice(1, usdString.length)
+      return formatDollarAmount(num, 2)
     }
   }
 
-  return Number(parseFloat(num).toFixed(5))
+  return Number(parseFloat(num).toFixed(5)).toLocaleString()
 }
 
 export function rawPercent(percentRaw) {

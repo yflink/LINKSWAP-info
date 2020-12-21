@@ -46,9 +46,7 @@ export default function Title() {
           <LinkswapIcon id="link" onClick={() => history.push('/')}>
             <img width={'24px'} src={Logo} alt="logo" />
           </LinkswapIcon>
-          <HeaderText>
-            LINKSWAP
-          </HeaderText>
+          <HeaderText>LINKSWAP</HeaderText>
         </RowFixed>
       </Flex>
     </TitleWrapper>

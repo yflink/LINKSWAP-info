@@ -135,8 +135,8 @@ const GlobalChart = ({ display }) => {
       )}
     </>
   ) : (
-      ''
-    )
+    ''
+  )
 }
 
 export default GlobalChart
