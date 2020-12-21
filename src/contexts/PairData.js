@@ -621,7 +621,7 @@ export function usePairChartData(pairAddress) {
 }
 
 /**
- * Get list of all pairs in Linkswap
+ * Get list of all pairs in LINKSWAP
  */
 export function useAllPairData() {
   const [state] = usePairDataContext()

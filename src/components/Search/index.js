@@ -437,10 +437,10 @@ export const Search = ({ small = false }) => {
               : below410
               ? 'Search...'
               : below470
-              ? 'Search Linkswap...'
+              ? 'Search LINKSWAP...'
               : below700
               ? 'Search pairs and tokens...'
-              : 'Search Linkswap pairs and tokens...'
+              : 'Search LINKSWAP pairs and tokens...'
           }
           value={value}
           onChange={(e) => {
