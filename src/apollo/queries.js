@@ -36,9 +36,8 @@ export const GET_BLOCK = gql`
 export const GET_BLOCKS = (timestamps) => {
   let queryString = 'query blocks {'
   queryString += timestamps.map((timestamp) => {
-    return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${
-      timestamp + 600
-    } }) {
+    return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600
+      } }) {
       number
     }`
   })
@@ -160,6 +159,46 @@ export const ETH_PRICE = (block) => {
       bundles(where: { id: ${BUNDLE_ID} }) {
         id
         ethPrice
+      }
+    }
+  `
+  return gql(queryString)
+}
+
+export const LINK_PRICE = (block) => {
+  const queryString = block
+    ? `
+    query bundles {
+      bundles(where: { id: ${BUNDLE_ID} } block: {number: ${block}}) {
+        id
+        linkPrice
+      }
+    }
+  `
+    : ` query bundles {
+      bundles(where: { id: ${BUNDLE_ID} }) {
+        id
+        linkPrice
+      }
+    }
+  `
+  return gql(queryString)
+}
+
+export const YFL_PRICE = (block) => {
+  const queryString = block
+    ? `
+    query bundles {
+      bundles(where: { id: ${BUNDLE_ID} } block: {number: ${block}}) {
+        id
+        yflPrice
+      }
+    }
+  `
+    : ` query bundles {
+      bundles(where: { id: ${BUNDLE_ID} }) {
+        id
+        yflPrice
       }
     }
   `
