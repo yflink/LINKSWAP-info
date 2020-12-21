@@ -136,8 +136,8 @@ function AccountSearch({ history, small }) {
                 )
               })
             ) : (
-                <TYPE.light style={{ marginTop: '1rem' }}>No saved accounts</TYPE.light>
-              )}
+              <TYPE.light style={{ marginTop: '1rem' }}>No saved accounts</TYPE.light>
+            )}
           </Panel>
         )}
 
@@ -152,8 +152,8 @@ function AccountSearch({ history, small }) {
                       {small ? (
                         <TYPE.header>{account?.slice(0, 6) + '...' + account?.slice(38, 42)}</TYPE.header>
                       ) : (
-                          <AccountLink>{account?.slice(0, 42)}</AccountLink>
-                        )}
+                        <AccountLink>{account?.slice(0, 42)}</AccountLink>
+                      )}
                     </ButtonFaded>
                     <Hover onClick={() => removeAccount(account)}>
                       <StyledIcon>
@@ -164,8 +164,8 @@ function AccountSearch({ history, small }) {
                 )
               })
             ) : (
-                <TYPE.light>No pinned wallets</TYPE.light>
-              )}
+              <TYPE.light>No pinned wallets</TYPE.light>
+            )}
           </>
         )}
       </AutoColumn>
