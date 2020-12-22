@@ -824,7 +824,7 @@ export function useTopLps() {
             if (results) {
               return results.liquidityPositions
             }
-          } catch (e) { }
+          } catch (e) {}
         })
       )
 
