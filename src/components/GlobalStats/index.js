@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { RowFixed, RowBetween } from '../Row'
 import { useMedia } from 'react-use'
-import { useGlobalData, useEthPrice } from '../../contexts/GlobalData'
+import { useGlobalData, useEthPrice, useLinkPrice, useYflPrice } from '../../contexts/GlobalData'
 import { formattedNum, localNumber } from '../../utils'
 
-import LinkswapPrice from '../LinkswapPrice'
 import { TYPE } from '../../Theme'
 
 const Header = styled.div`
@@ -25,11 +24,13 @@ export default function GlobalStats() {
   const below400 = useMedia('(max-width: 400px)')
   const below816 = useMedia('(max-width: 816px)')
 
-  const [showPriceCard, setShowPriceCard] = useState(false)
-
   const { oneDayVolumeUSD, oneDayTxns, pairCount } = useGlobalData()
   const [ethPrice] = useEthPrice()
+  const [linkPrice] = useLinkPrice()
+  const [yflPrice] = useYflPrice()
   const formattedEthPrice = ethPrice ? formattedNum(ethPrice, true) : '-'
+  const formattedLinkPrice = linkPrice ? formattedNum(linkPrice, true) : '-'
+  const formattedYflPrice = yflPrice ? formattedNum(yflPrice, true) : '-'
   const oneDayFees = oneDayVolumeUSD ? formattedNum(oneDayVolumeUSD * 0.003, true) : ''
 
   return (
@@ -37,18 +38,20 @@ export default function GlobalStats() {
       <RowBetween style={{ padding: below816 ? '0.5rem' : '.5rem' }}>
         <RowFixed>
           {!below400 && (
-            <TYPE.main
-              mr={'1rem'}
-              onMouseEnter={() => {
-                setShowPriceCard(true)
-              }}
-              onMouseLeave={() => {
-                setShowPriceCard(false)
-              }}
-              style={{ position: 'relative' }}
-            >
+            <TYPE.main mr={'1rem'}>
               ETH Price: <Medium>{formattedEthPrice}</Medium>
-              {showPriceCard && <LinkswapPrice />}
+            </TYPE.main>
+          )}
+
+          {!below400 && (
+            <TYPE.main mr={'1rem'}>
+              LINK Price: <Medium>{formattedLinkPrice}</Medium>
+            </TYPE.main>
+          )}
+
+          {!below400 && (
+            <TYPE.main mr={'1rem'}>
+              YFL Price: <Medium>{formattedYflPrice}</Medium>
             </TYPE.main>
           )}
 

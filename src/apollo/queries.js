@@ -166,6 +166,46 @@ export const ETH_PRICE = (block) => {
   return gql(queryString)
 }
 
+export const LINK_PRICE = (block) => {
+  const queryString = block
+    ? `
+    query bundles {
+      bundles(where: { id: ${BUNDLE_ID} } block: {number: ${block}}) {
+        id
+        linkPrice
+      }
+    }
+  `
+    : ` query bundles {
+      bundles(where: { id: ${BUNDLE_ID} }) {
+        id
+        linkPrice
+      }
+    }
+  `
+  return gql(queryString)
+}
+
+export const YFL_PRICE = (block) => {
+  const queryString = block
+    ? `
+    query bundles {
+      bundles(where: { id: ${BUNDLE_ID} } block: {number: ${block}}) {
+        id
+        yflPrice
+      }
+    }
+  `
+    : ` query bundles {
+      bundles(where: { id: ${BUNDLE_ID} }) {
+        id
+        yflPrice
+      }
+    }
+  `
+  return gql(queryString)
+}
+
 export const USER = (block, account) => {
   const queryString = `
     query users {

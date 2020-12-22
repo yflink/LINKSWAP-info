@@ -15,6 +15,8 @@ import {
   GLOBAL_TXNS,
   GLOBAL_CHART,
   ETH_PRICE,
+  LINK_PRICE,
+  YFL_PRICE,
   ALL_PAIRS,
   ALL_TOKENS,
   TOP_LPS_PER_PAIRS,
@@ -25,7 +27,11 @@ const UPDATE = 'UPDATE'
 const UPDATE_TXNS = 'UPDATE_TXNS'
 const UPDATE_CHART = 'UPDATE_CHART'
 const UPDATE_ETH_PRICE = 'UPDATE_ETH_PRICE'
+const UPDATE_LINK_PRICE = 'UPDATE_LINK_PRICE'
+const UPDATE_YFL_PRICE = 'UPDATE_YFL_PRICE'
 const ETH_PRICE_KEY = 'ETH_PRICE_KEY'
+const LINK_PRICE_KEY = 'LINK_PRICE_KEY'
+const YFL_PRICE_KEY = 'YFL_PRICE_KEY'
 const UPDATE_ALL_PAIRS_IN_LINKSWAP = 'UPDAUPDATE_ALL_PAIRS_IN_LINKSWAPTE_TOP_PAIRS'
 const UPDATE_ALL_TOKENS_IN_LINKSWAP = 'UPDATE_ALL_TOKENS_IN_LINKSWAP'
 const UPDATE_TOP_LPS = 'UPDATE_TOP_LPS'
@@ -66,12 +72,34 @@ function reducer(state, { type, payload }) {
         },
       }
     }
+
     case UPDATE_ETH_PRICE: {
-      const { ethPrice, oneDayPrice, ethPriceChange } = payload
+      const { ethPrice, ethOneDayPrice, ethPriceChange } = payload
       return {
+        ...state,
         [ETH_PRICE_KEY]: ethPrice,
-        oneDayPrice,
+        ethOneDayPrice,
         ethPriceChange,
+      }
+    }
+
+    case UPDATE_LINK_PRICE: {
+      const { linkPrice, linkOneDayPrice, linkPriceChange } = payload
+      return {
+        ...state,
+        [LINK_PRICE_KEY]: linkPrice,
+        linkOneDayPrice,
+        linkPriceChange,
+      }
+    }
+
+    case UPDATE_YFL_PRICE: {
+      const { yflPrice, yflOneDayPrice, yflPriceChange } = payload
+      return {
+        ...state,
+        [YFL_PRICE_KEY]: yflPrice,
+        yflOneDayPrice,
+        yflPriceChange,
       }
     }
 
@@ -134,13 +162,35 @@ export default function Provider({ children }) {
     })
   }, [])
 
-  const updateEthPrice = useCallback((ethPrice, oneDayPrice, ethPriceChange) => {
+  const updateEthPrice = useCallback((ethPrice, ethOneDayPrice, ethPriceChange) => {
     dispatch({
       type: UPDATE_ETH_PRICE,
       payload: {
         ethPrice,
-        oneDayPrice,
+        ethOneDayPrice,
         ethPriceChange,
+      },
+    })
+  }, [])
+
+  const updateLinkPrice = useCallback((linkPrice, linkOneDayPrice, linkPriceChange) => {
+    dispatch({
+      type: UPDATE_LINK_PRICE,
+      payload: {
+        linkPrice,
+        linkOneDayPrice,
+        linkPriceChange,
+      },
+    })
+  }, [])
+
+  const updateYflPrice = useCallback((yflPrice, yflOneDayPrice, yflPriceChange) => {
+    dispatch({
+      type: UPDATE_YFL_PRICE,
+      payload: {
+        yflPrice,
+        yflOneDayPrice,
+        yflPriceChange,
       },
     })
   }, [])
@@ -181,6 +231,8 @@ export default function Provider({ children }) {
             updateTransactions,
             updateChart,
             updateEthPrice,
+            updateLinkPrice,
+            updateYflPrice,
             updateTopLps,
             updateAllPairsInLinkswap,
             updateAllTokensInLinkswap,
@@ -193,6 +245,8 @@ export default function Provider({ children }) {
           updateTopLps,
           updateChart,
           updateEthPrice,
+          updateLinkPrice,
+          updateYflPrice,
           updateAllPairsInLinkswap,
           updateAllTokensInLinkswap,
         ]
@@ -466,6 +520,72 @@ const getEthPrice = async () => {
   return [ethPrice, ethPriceOneDay, priceChangeETH]
 }
 
+/**
+ * Gets the current price  of LINK, 24 hour price, and % change between them
+ */
+const getLinkPrice = async () => {
+  const utcCurrentTime = dayjs()
+  const utcOneDayBack = utcCurrentTime.subtract(1, 'day').startOf('minute').unix()
+
+  let linkPrice = 0
+  let linkPriceOneDay = 0
+  let priceChangeLINK = 0
+
+  try {
+    let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack)
+    let result = await client.query({
+      query: LINK_PRICE(),
+      fetchPolicy: 'cache-first',
+    })
+    let resultOneDay = await client.query({
+      query: LINK_PRICE(oneDayBlock),
+      fetchPolicy: 'cache-first',
+    })
+    const currentPrice = result?.data?.bundles[0]?.linkPrice
+    const oneDayBackPrice = resultOneDay?.data?.bundles[0]?.linkPrice
+    priceChangeLINK = getPercentChange(currentPrice, oneDayBackPrice)
+    linkPrice = currentPrice
+    linkPriceOneDay = oneDayBackPrice
+  } catch (e) {
+    console.log(e)
+  }
+
+  return [linkPrice, linkPriceOneDay, priceChangeLINK]
+}
+
+/**
+ * Gets the current price  of YFL, 24 hour price, and % change between them
+ */
+const getYflPrice = async () => {
+  const utcCurrentTime = dayjs()
+  const utcOneDayBack = utcCurrentTime.subtract(1, 'day').startOf('minute').unix()
+
+  let yflPrice = 0
+  let yflPriceOneDay = 0
+  let priceChangeYFL = 0
+
+  try {
+    let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack)
+    let result = await client.query({
+      query: YFL_PRICE(),
+      fetchPolicy: 'cache-first',
+    })
+    let resultOneDay = await client.query({
+      query: YFL_PRICE(oneDayBlock),
+      fetchPolicy: 'cache-first',
+    })
+    const currentPrice = result?.data?.bundles[0]?.yflPrice
+    const oneDayBackPrice = resultOneDay?.data?.bundles[0]?.yflPrice
+    priceChangeYFL = getPercentChange(currentPrice, oneDayBackPrice)
+    yflPrice = currentPrice
+    yflPriceOneDay = oneDayBackPrice
+  } catch (e) {
+    console.log(e)
+  }
+
+  return [yflPrice, yflPriceOneDay, priceChangeYFL]
+}
+
 const PAIRS_TO_FETCH = 500
 const TOKENS_TO_FETCH = 500
 
@@ -610,7 +730,7 @@ export function useGlobalTransactions() {
 export function useEthPrice() {
   const [state, { updateEthPrice }] = useGlobalDataContext()
   const ethPrice = state?.[ETH_PRICE_KEY]
-  const ethPriceOld = state?.['oneDayPrice']
+  const ethPriceOld = state?.['ethOneDayPrice']
   useEffect(() => {
     async function checkForEthPrice() {
       if (!ethPrice) {
@@ -622,6 +742,40 @@ export function useEthPrice() {
   }, [ethPrice, updateEthPrice])
 
   return [ethPrice, ethPriceOld]
+}
+
+export function useLinkPrice() {
+  const [state, { updateLinkPrice }] = useGlobalDataContext()
+  const linkPrice = state?.[LINK_PRICE_KEY]
+  const linkPriceOld = state?.['linkOneDayPrice']
+  useEffect(() => {
+    async function checkForLinkPrice() {
+      if (!linkPrice) {
+        let [newPrice, oneDayPrice, priceChange] = await getLinkPrice()
+        updateLinkPrice(newPrice, oneDayPrice, priceChange)
+      }
+    }
+    checkForLinkPrice()
+  }, [linkPrice, updateLinkPrice])
+
+  return [linkPrice, linkPriceOld]
+}
+
+export function useYflPrice() {
+  const [state, { updateYflPrice }] = useGlobalDataContext()
+  const yflPrice = state?.[YFL_PRICE_KEY]
+  const yflPriceOld = state?.['yflOneDayPrice']
+  useEffect(() => {
+    async function checkForYflPrice() {
+      if (!yflPrice) {
+        let [newPrice, oneDayPrice, priceChange] = await getYflPrice()
+        updateYflPrice(newPrice, oneDayPrice, priceChange)
+      }
+    }
+    checkForYflPrice()
+  }, [yflPrice, updateYflPrice])
+
+  return [yflPrice, yflPriceOld]
 }
 
 export function useAllPairsInLinkswap() {
