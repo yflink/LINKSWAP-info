@@ -214,10 +214,10 @@ function PositionList({ positions }) {
                   <TYPE.small fontWeight={400}>
                     {parseFloat(position.pair.token0.derivedETH)
                       ? formattedNum(
-                        position?.fees.sum / (parseFloat(position.pair.token0.derivedETH) * ethPrice) / 2,
-                        false,
-                        true
-                      )
+                          position?.fees.sum / (parseFloat(position.pair.token0.derivedETH) * ethPrice) / 2,
+                          false,
+                          true
+                        )
                       : 0}{' '}
                   </TYPE.small>
                   <FormattedName
@@ -231,10 +231,10 @@ function PositionList({ positions }) {
                   <TYPE.small fontWeight={400}>
                     {parseFloat(position.pair.token1.derivedETH)
                       ? formattedNum(
-                        position?.fees.sum / (parseFloat(position.pair.token1.derivedETH) * ethPrice) / 2,
-                        false,
-                        true
-                      )
+                          position?.fees.sum / (parseFloat(position.pair.token1.derivedETH) * ethPrice) / 2,
+                          false,
+                          true
+                        )
                       : 0}{' '}
                   </TYPE.small>
                   <FormattedName
@@ -269,8 +269,10 @@ function PositionList({ positions }) {
           return return0 > return1 ? (sortDirection ? -1 : 1) : sortDirection ? 1 : -1
         }
         if (sortedColumn === SORT_FIELD.VALUE) {
-          const bal0 = (p0.pair.totalSupply === '0') ? 0 : (p0.liquidityTokenBalance / p0.pair.totalSupply) * p0.pair.reserveUSD
-          const bal1 = (p1.pair.totalSupply === '0') ? 0 : (p1.liquidityTokenBalance / p1.pair.totalSupply) * p1.pair.reserveUSD
+          const bal0 =
+            p0.pair.totalSupply === '0' ? 0 : (p0.liquidityTokenBalance / p0.pair.totalSupply) * p0.pair.reserveUSD
+          const bal1 =
+            p1.pair.totalSupply === '0' ? 0 : (p1.liquidityTokenBalance / p1.pair.totalSupply) * p1.pair.reserveUSD
           return bal0 > bal1 ? (sortDirection ? -1 : 1) : sortDirection ? 1 : -1
         }
         return 1
