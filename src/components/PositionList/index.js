@@ -138,7 +138,7 @@ function PositionList({ positions }) {
   const [ethPrice] = useEthPrice()
 
   const ListItem = ({ position, index }) => {
-    const poolOwnership = position.liquidityTokenBalance / position.pair.totalSupply
+    const poolOwnership = position.pair.totalSupply ? position.liquidityTokenBalance / position.pair.totalSupply : 0
     const valueUSD = poolOwnership * position.pair.reserveUSD
 
     return (
@@ -263,12 +263,16 @@ function PositionList({ positions }) {
         if (sortedColumn === SORT_FIELD.HODL) {
           return p0?.hodl?.sum > p1?.hodl?.sum ? (sortDirection ? -1 : 1) : sortDirection ? 1 : -1
         }
-        if (sortedColumn === SORT_FIELD.linkswap_RETURN) {
-          return p0?.linkswap?.return > p1?.linkswap?.return ? (sortDirection ? -1 : 1) : sortDirection ? 1 : -1
+        if (sortedColumn === SORT_FIELD.LINKSWAP_RETURN) {
+          const return0 = p0?.linkswap?.return !== null ? p0?.linkswap?.return : 0
+          const return1 = p1?.linkswap?.return !== null ? p1?.linkswap?.return : 0
+          return return0 > return1 ? (sortDirection ? -1 : 1) : sortDirection ? 1 : -1
         }
         if (sortedColumn === SORT_FIELD.VALUE) {
-          const bal0 = (p0.liquidityTokenBalance / p0.pair.totalSupply) * p0.pair.reserveUSD
-          const bal1 = (p1.liquidityTokenBalance / p1.pair.totalSupply) * p1.pair.reserveUSD
+          const bal0 =
+            p0.pair.totalSupply === '0' ? 0 : (p0.liquidityTokenBalance / p0.pair.totalSupply) * p0.pair.reserveUSD
+          const bal1 =
+            p1.pair.totalSupply === '0' ? 0 : (p1.liquidityTokenBalance / p1.pair.totalSupply) * p1.pair.reserveUSD
           return bal0 > bal1 ? (sortDirection ? -1 : 1) : sortDirection ? 1 : -1
         }
         return 1
@@ -310,12 +314,12 @@ function PositionList({ positions }) {
             <ClickableText
               area="return"
               onClick={() => {
-                setSortedColumn(SORT_FIELD.linkswap_RETURN)
-                setSortDirection(sortedColumn !== SORT_FIELD.linkswap_RETURN ? true : !sortDirection)
+                setSortedColumn(SORT_FIELD.LINKSWAP_RETURN)
+                setSortDirection(sortedColumn !== SORT_FIELD.LINKSWAP_RETURN ? true : !sortDirection)
               }}
             >
               {below740 ? 'Fees' : 'Total Fees Earned'}{' '}
-              {sortedColumn === SORT_FIELD.linkswap_RETURN ? (!sortDirection ? '↑' : '↓') : ''}
+              {sortedColumn === SORT_FIELD.LINKSWAP_RETURN ? (!sortDirection ? '↑' : '↓') : ''}
             </ClickableText>
           </Flex>
         )}

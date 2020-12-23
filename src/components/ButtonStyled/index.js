@@ -79,7 +79,7 @@ export const ButtonLight = styled(Base)`
 
 export function ButtonDropdown({ disabled = false, children, open, ...rest }) {
   return (
-    <ButtonFaded {...rest} disabled={disabled} ope={open}>
+    <ButtonFaded {...rest} disabled={disabled} open={open}>
       <RowBetween>
         <div style={{ display: 'flex', alignItems: 'center' }}>{children}</div>
         {open ? (
