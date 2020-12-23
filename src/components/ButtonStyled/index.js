@@ -73,13 +73,13 @@ export const ButtonLight = styled(Base)`
 
   :hover {
     background-color: ${({ color, theme }) =>
-      color ? transparentize(0.8, color) : transparentize(0.8, theme.primary1)};
+    color ? transparentize(0.8, color) : transparentize(0.8, theme.primary1)};
   }
 `
 
 export function ButtonDropdown({ disabled = false, children, open, ...rest }) {
   return (
-    <ButtonFaded {...rest} disabled={disabled} ope={open}>
+    <ButtonFaded {...rest} disabled={disabled} open={open}>
       <RowBetween>
         <div style={{ display: 'flex', alignItems: 'center' }}>{children}</div>
         {open ? (
@@ -87,10 +87,10 @@ export function ButtonDropdown({ disabled = false, children, open, ...rest }) {
             <ChevronUp size={24} />
           </StyledIcon>
         ) : (
-          <StyledIcon>
-            <ChevronDown size={24} />
-          </StyledIcon>
-        )}
+            <StyledIcon>
+              <ChevronDown size={24} />
+            </StyledIcon>
+          )}
       </RowBetween>
     </ButtonFaded>
   )

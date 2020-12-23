@@ -202,10 +202,22 @@ function SideNav({ history }) {
           )}
         </DesktopWrapper>
       ) : (
-        <MobileWrapper>
-          <Title />
-        </MobileWrapper>
-      )}
+          <MobileWrapper>
+            <Title />
+            <BasicLink to="/accounts">
+              <Option
+                activeText={
+                  (history.location.pathname.split('/')[1] === 'accounts' ||
+                    history.location.pathname.split('/')[1] === 'account') ??
+                  undefined
+                }
+              >
+                <List size={20} style={{ marginRight: '.75rem' }} />
+                Accounts
+              </Option>
+            </BasicLink>
+          </MobileWrapper>
+        )}
     </Wrapper>
   )
 }
