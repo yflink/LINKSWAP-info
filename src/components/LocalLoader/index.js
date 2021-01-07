@@ -22,8 +22,7 @@ const Wrapper = styled.div`
 
 const AnimatedImg = styled.div`
   & > * {
-    width: ${(props) =>
-    (props.index ? '120px' : '60px')};
+    width: ${(props) => (props.index ? '120px' : '60px')};
   }
 `
 
