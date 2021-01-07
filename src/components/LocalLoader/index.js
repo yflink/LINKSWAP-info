@@ -2,12 +2,6 @@ import React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { useDarkModeManager } from '../../contexts/LocalStorage'
 
-const pulse = keyframes`
-  0% { transform: scale(1); }
-  60% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-`
-
 const Wrapper = styled.div`
   pointer-events: none;
   display: flex;
@@ -27,19 +21,25 @@ const Wrapper = styled.div`
 `
 
 const AnimatedImg = styled.div`
-  animation: ${pulse} 800ms linear infinite;
   & > * {
-    width: 72px;
+    width: ${(props) => (props.index ? '120px' : '60px')};
   }
 `
 
-const LocalLoader = ({ fill }) => {
+const LocalLoader = ({ fill, index }) => {
   const [darkMode] = useDarkModeManager()
 
   return (
     <Wrapper fill={fill}>
-      <AnimatedImg>
-        <img src={require(darkMode ? '../../assets/logo.png' : '../../assets/logo.png')} alt="loading-icon" />
+      <AnimatedImg index={index}>
+        {index ? (
+          <img src={require(darkMode ? '../../assets/spinner.gif' : '../../assets/spinner.gif')} alt="loading-icon" />
+        ) : (
+          <img
+            src={require(darkMode ? '../../assets/spinner_dark.gif' : '../../assets/spinner_dark.gif')}
+            alt="loading-icon"
+          />
+        )}
       </AnimatedImg>
     </Wrapper>
   )
