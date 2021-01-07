@@ -203,7 +203,7 @@ function App() {
             </Switch>
           </BrowserRouter>
         ) : (
-          <LocalLoader fill="true" />
+          <LocalLoader fill="true" index="true" />
         )}
       </AppWrapper>
     </ApolloProvider>
