@@ -280,6 +280,10 @@ function TxnList({ transactions, symbol0Override, symbol1Override, color }) {
   const below780 = useMedia('(max-width: 780px)')
 
   const ListItem = ({ item }) => {
+    if(item.token0Amount === null) {
+      return true
+    } else {
+
     return (
       <DashGrid style={{ height: '48px' }}>
         <DataText area="txn" fontWeight="500">
@@ -312,6 +316,8 @@ function TxnList({ transactions, symbol0Override, symbol1Override, color }) {
         <DataText area="time">{formatTime(item.timestamp)}</DataText>
       </DashGrid>
     )
+
+    }
   }
 
   return (
