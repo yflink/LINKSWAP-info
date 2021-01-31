@@ -5,7 +5,7 @@ import Link from '../Link'
 
 const links = [
   { url: 'https://yflink.io/', text: 'About' },
-  { url: 'https://medium.com/yflink/', text: 'Blog' },
+  { url: 'https://blog.yflink.io/', text: 'Blog' },
   { url: 'https://github.com/yflink/', text: 'Code' },
 ]
 
