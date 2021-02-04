@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { RowFixed, RowBetween } from '../Row'
 import { useMedia } from 'react-use'
-import { useGlobalData, useEthPrice, useLinkPrice, useYflPrice } from '../../contexts/GlobalData'
+import { useGlobalData, useEthPrice, useLinkPrice, useYflPrice, useSYflPrice, useYflusdPrice } from '../../contexts/GlobalData'
 import { formattedNum, localNumber } from '../../utils'
 
 import { TYPE } from '../../Theme'
@@ -28,9 +28,13 @@ export default function GlobalStats() {
   const [ethPrice] = useEthPrice()
   const [linkPrice] = useLinkPrice()
   const [yflPrice] = useYflPrice()
+  const [syflPrice] = useSYflPrice()
+  const [yflusdPrice] = useYflusdPrice()
   const formattedEthPrice = ethPrice ? formattedNum(ethPrice, true) : '-'
   const formattedLinkPrice = linkPrice ? formattedNum(linkPrice, true) : '-'
   const formattedYflPrice = yflPrice ? formattedNum(yflPrice, true) : '-'
+  const formattedSYflPrice = syflPrice ? formattedNum(syflPrice, true) : '-'
+  const formattedYflUsdPrices = yflusdPrice ? formattedNum(yflusdPrice, true) : '-'
   const oneDayFees = oneDayVolumeUSD ? formattedNum(oneDayVolumeUSD * 0.003, true) : ''
 
   return (
@@ -52,6 +56,18 @@ export default function GlobalStats() {
           {!below400 && (
             <TYPE.main mr={'1rem'}>
               YFL Price: <Medium>{formattedYflPrice}</Medium>
+            </TYPE.main>
+          )}
+
+          {!below400 && (
+            <TYPE.main mr={'1rem'}>
+              YFLUSD Price: <Medium>{formattedYflUsdPrices}</Medium>
+            </TYPE.main>
+          )}
+
+          {!below400 && (
+            <TYPE.main mr={'1rem'}>
+              sYFL Price: <Medium>{formattedSYflPrice}</Medium>
             </TYPE.main>
           )}
 

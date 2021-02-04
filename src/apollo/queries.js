@@ -36,9 +36,8 @@ export const GET_BLOCK = gql`
 export const GET_BLOCKS = (timestamps) => {
   let queryString = 'query blocks {'
   queryString += timestamps.map((timestamp) => {
-    return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${
-      timestamp + 600
-    } }) {
+    return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600
+      } }) {
       number
     }`
   })
@@ -200,6 +199,46 @@ export const YFL_PRICE = (block) => {
       bundles(where: { id: ${BUNDLE_ID} }) {
         id
         yflPrice
+      }
+    }
+  `
+  return gql(queryString)
+}
+
+export const SYFL_PRICE = (block) => {
+  const queryString = block
+    ? `
+    query bundles {
+      bundles(where: { id: ${BUNDLE_ID} } block: {number: ${block}}) {
+        id
+        syflPrice
+      }
+    }
+  `
+    : ` query bundles {
+      bundles(where: { id: ${BUNDLE_ID} }) {
+        id
+        syflPrice
+      }
+    }
+  `
+  return gql(queryString)
+}
+
+export const YFLUSD_PRICE = (block) => {
+  const queryString = block
+    ? `
+    query bundles {
+      bundles(where: { id: ${BUNDLE_ID} } block: {number: ${block}}) {
+        id
+        yflusdPrice
+      }
+    }
+  `
+    : ` query bundles {
+      bundles(where: { id: ${BUNDLE_ID} }) {
+        id
+        yflusdPrice
       }
     }
   `
