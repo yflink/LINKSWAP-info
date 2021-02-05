@@ -141,33 +141,42 @@ function PositionList({ positions }) {
     const poolOwnership = position.pair.totalSupply ? position.liquidityTokenBalance / position.pair.totalSupply : 0
     const valueUSD = poolOwnership * position.pair.reserveUSD
 
+    let token0 = position.pair.token0
+    let token1 = position.pair.token1
+
+    if (token1.symbol === 'ETH') {
+      token0 = position.pair.token1
+      token1 = position.pair.token0
+    }
+    if (token1.symbol === 'LINK' && token0.symbol !== 'ETH') {
+      token0 = position.pair.token1
+      token1 = position.pair.token0
+    }
+    if (token1.symbol === 'YFLUSD' && token0.symbol !== 'ETH' && token0.symbol !== 'LINK') {
+      token0 = position.pair.token1
+      token1 = position.pair.token0
+    }
+
     return (
       <DashGrid style={{ opacity: poolOwnership > 0 ? 1 : 0.6 }} focus={true}>
         {!below740 && <DataText area="number">{index}</DataText>}
         <DataText area="name" justifyContent="flex-start" alignItems="flex-start">
           <AutoColumn gap="8px" justify="flex-start" align="flex-start">
-            <DoubleTokenLogo size={16} a0={position.pair.token0.id} a1={position.pair.token1.id} margin={!below740} />
+            <DoubleTokenLogo size={16} a0={token0.id} a1={token1.id} margin={!below740} />
           </AutoColumn>
           <AutoColumn gap="8px" justify="flex-start" style={{ marginLeft: '20px' }}>
             <CustomLink to={'/pair/' + position.pair.id}>
               <TYPE.main style={{ whiteSpace: 'nowrap' }} to={'/pair/'}>
-                <FormattedName
-                  text={position.pair.token0.symbol + '-' + position.pair.token1.symbol}
-                  maxCharacters={below740 ? 10 : 18}
-                />
+                <FormattedName text={token0.symbol + '-' + token1.symbol} maxCharacters={below740 ? 10 : 18} />
               </TYPE.main>
             </CustomLink>
 
             <RowFixed gap="8px" justify="flex-start">
-              <Link
-                external
-                href={getPoolLink(position.pair.token0.id, position.pair.token1.id)}
-                style={{ marginRight: '.5rem' }}
-              >
+              <Link external href={getPoolLink(token0.id, token1.id)} style={{ marginRight: '.5rem' }}>
                 <ButtonLight style={{ padding: '4px 6px', borderRadius: '4px' }}>Add</ButtonLight>
               </Link>
               {poolOwnership > 0 && (
-                <Link external href={getPoolLink(position.pair.token0.id, position.pair.token1.id, true)}>
+                <Link external href={getPoolLink(token0.id, token1.id, true)}>
                   <ButtonLight style={{ padding: '4px 6px', borderRadius: '4px' }}>Remove</ButtonLight>
                 </Link>
               )}
@@ -183,7 +192,7 @@ function PositionList({ positions }) {
                   {formattedNum(poolOwnership * parseFloat(position.pair.reserve0))}{' '}
                 </TYPE.small>
                 <FormattedName
-                  text={position.pair.token0.symbol}
+                  text={token0.symbol}
                   maxCharacters={below740 ? 10 : 18}
                   margin={true}
                   fontSize={'11px'}
@@ -194,7 +203,7 @@ function PositionList({ positions }) {
                   {formattedNum(poolOwnership * parseFloat(position.pair.reserve1))}{' '}
                 </TYPE.small>
                 <FormattedName
-                  text={position.pair.token1.symbol}
+                  text={token1.symbol}
                   maxCharacters={below740 ? 10 : 18}
                   margin={true}
                   fontSize={'11px'}
@@ -212,16 +221,12 @@ function PositionList({ positions }) {
               <AutoColumn gap="4px" justify="flex-end">
                 <RowFixed>
                   <TYPE.small fontWeight={400}>
-                    {parseFloat(position.pair.token0.derivedETH)
-                      ? formattedNum(
-                          position?.fees.sum / (parseFloat(position.pair.token0.derivedETH) * ethPrice) / 2,
-                          false,
-                          true
-                        )
+                    {parseFloat(token0.derivedETH)
+                      ? formattedNum(position?.fees.sum / (parseFloat(token0.derivedETH) * ethPrice) / 2, false, true)
                       : 0}{' '}
                   </TYPE.small>
                   <FormattedName
-                    text={position.pair.token0.symbol}
+                    text={token0.symbol}
                     maxCharacters={below740 ? 10 : 18}
                     margin={true}
                     fontSize={'11px'}
@@ -229,16 +234,12 @@ function PositionList({ positions }) {
                 </RowFixed>
                 <RowFixed>
                   <TYPE.small fontWeight={400}>
-                    {parseFloat(position.pair.token1.derivedETH)
-                      ? formattedNum(
-                          position?.fees.sum / (parseFloat(position.pair.token1.derivedETH) * ethPrice) / 2,
-                          false,
-                          true
-                        )
+                    {parseFloat(token1.derivedETH)
+                      ? formattedNum(position?.fees.sum / (parseFloat(token1.derivedETH) * ethPrice) / 2, false, true)
                       : 0}{' '}
                   </TYPE.small>
                   <FormattedName
-                    text={position.pair.token1.symbol}
+                    text={token1.symbol}
                     maxCharacters={below740 ? 10 : 18}
                     margin={true}
                     fontSize={'11px'}

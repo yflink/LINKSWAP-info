@@ -152,19 +152,30 @@ function PairList({ pairs, color, disbaleLinks, maxItems = 10 }) {
       const volume = formattedNum(pairData.oneDayVolumeUSD, true)
       const apy = formattedPercent((pairData.oneDayVolumeUSD * 0.003 * 365 * 100) / pairData.reserveUSD)
 
+      let token0 = pairData.token0
+      let token1 = pairData.token1
+
+      if (token1.symbol === 'ETH') {
+        token0 = pairData.token1
+        token1 = pairData.token0
+      }
+      if (token1.symbol === 'LINK' && token0.symbol !== 'ETH') {
+        token0 = pairData.token1
+        token1 = pairData.token0
+      }
+      if (token1.symbol === 'YFLUSD' && token0.symbol !== 'ETH' && token0.symbol !== 'LINK') {
+        token0 = pairData.token1
+        token1 = pairData.token0
+      }
+
       return (
         <DashGrid style={{ height: '48px' }} disbaleLinks={disbaleLinks} focus={true}>
           <DataText area="name" fontWeight="500">
             {!below600 && <div style={{ marginRight: '20px', width: '10px' }}>{index}</div>}
-            <DoubleTokenLogo
-              size={below600 ? 16 : 20}
-              a0={pairData.token0.id}
-              a1={pairData.token1.id}
-              margin={!below740}
-            />
+            <DoubleTokenLogo size={below600 ? 16 : 20} a0={token0.id} a1={token1.id} margin={!below740} />
             <CustomLink style={{ marginLeft: '20px', whiteSpace: 'nowrap' }} to={'/pair/' + pairAddress} color={color}>
               <FormattedName
-                text={pairData.token0.symbol + '-' + pairData.token1.symbol}
+                text={token0.symbol + '-' + token1.symbol}
                 maxCharacters={below600 ? 8 : 16}
                 adjustSize={true}
                 link={true}
