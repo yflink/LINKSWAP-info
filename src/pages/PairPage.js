@@ -123,19 +123,22 @@ function PairPage({ pairAddress, history }) {
 
   let tokenA = token0
   let tokenB = token1
+  let reserveA = reserve0
+  let reserveB = reserve1
 
-  if (tokenB?.symbol === 'ETH') {
+  if (
+    tokenB?.symbol === 'ETH' ||
+    (tokenB?.symbol === 'LINK' && tokenA?.symbol !== 'ETH') ||
+    (tokenB?.symbol === 'YFLUSD' && tokenA?.symbol !== 'ETH' && tokenA?.symbol !== 'LINK')
+  ) {
     tokenA = token1
     tokenB = token0
+    reserveA = reserve1
+    reserveB = reserve0
   }
-  if (tokenB?.symbol === 'LINK' && tokenA?.symbol !== 'ETH') {
-    tokenA = token1
-    tokenB = token0
-  }
-  if (tokenB?.symbol === 'YFLUSD' && tokenA?.symbol !== 'ETH' && tokenA?.symbol !== 'LINK') {
-    tokenA = token1
-    tokenB = token0
-  }
+
+  console.log(tokenA, token0)
+  console.log(tokenB, token1)
 
   useEffect(() => {
     document.querySelector('body').scrollTo(0, 0)
@@ -191,8 +194,8 @@ function PairPage({ pairAddress, history }) {
     tokenB?.derivedETH && ethPrice ? formattedNum(parseFloat(tokenB.derivedETH) * parseFloat(ethPrice), true) : ''
 
   // rates
-  const tokenARate = reserve0 && reserve1 ? formattedNum(reserve1 / reserve0) : '-'
-  const tokenBRate = reserve0 && reserve1 ? formattedNum(reserve0 / reserve1) : '-'
+  const tokenARate = reserveA && reserveB ? formattedNum(reserveB / reserveA) : '-'
+  const tokenBRate = reserveA && reserveB ? formattedNum(reserveA / reserveB) : '-'
 
   // formatted symbols for overflow
   const formattedSymbol0 = tokenA?.symbol.length > 6 ? tokenA?.symbol.slice(0, 5) + '...' : tokenA?.symbol
@@ -391,7 +394,7 @@ function PairPage({ pairAddress, history }) {
                         <TokenLogo address={tokenA?.id} />
                         <TYPE.main fontSize={20} lineHeight={1} fontWeight={500}>
                           <RowFixed>
-                            {reserve0 ? formattedNum(reserve0) : ''}{' '}
+                            {reserveA ? formattedNum(reserveA) : ''}{' '}
                             <FormattedName text={tokenA?.symbol ?? ''} maxCharacters={8} margin={true} />
                           </RowFixed>
                         </TYPE.main>
@@ -402,7 +405,7 @@ function PairPage({ pairAddress, history }) {
                         <TokenLogo address={tokenB?.id} />
                         <TYPE.main fontSize={20} lineHeight={1} fontWeight={500}>
                           <RowFixed>
-                            {reserve1 ? formattedNum(reserve1) : ''}{' '}
+                            {reserveB ? formattedNum(reserveB) : ''}{' '}
                             <FormattedName text={tokenB?.symbol ?? ''} maxCharacters={8} margin={true} />
                           </RowFixed>
                         </TYPE.main>
@@ -419,8 +422,8 @@ function PairPage({ pairAddress, history }) {
                   <PairChart
                     address={pairAddress}
                     color={backgroundColor}
-                    base0={reserve1 / reserve0}
-                    base1={reserve0 / reserve1}
+                    base0={reserveB / reserveA}
+                    base1={reserveA / reserveB}
                   />
                 </Panel>
               </PanelWrapper>
