@@ -155,15 +155,11 @@ function PairList({ pairs, color, disbaleLinks, maxItems = 10 }) {
       let token0 = pairData.token0
       let token1 = pairData.token1
 
-      if (token1.symbol === 'ETH') {
-        token0 = pairData.token1
-        token1 = pairData.token0
-      }
-      if (token1.symbol === 'LINK' && token0.symbol !== 'ETH') {
-        token0 = pairData.token1
-        token1 = pairData.token0
-      }
-      if (token1.symbol === 'YFLUSD' && token0.symbol !== 'ETH' && token0.symbol !== 'LINK') {
+      if (
+        token1.symbol === 'ETH' ||
+        (token1.symbol === 'LINK' && token0.symbol !== 'ETH') ||
+        (token1.symbol === 'YFLUSD' && token0.symbol !== 'ETH' && token0.symbol !== 'LINK')
+      ) {
         token0 = pairData.token1
         token1 = pairData.token0
       }

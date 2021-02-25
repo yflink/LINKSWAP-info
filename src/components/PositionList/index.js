@@ -144,15 +144,11 @@ function PositionList({ positions }) {
     let token0 = position.pair.token0
     let token1 = position.pair.token1
 
-    if (token1.symbol === 'ETH') {
-      token0 = position.pair.token1
-      token1 = position.pair.token0
-    }
-    if (token1.symbol === 'LINK' && token0.symbol !== 'ETH') {
-      token0 = position.pair.token1
-      token1 = position.pair.token0
-    }
-    if (token1.symbol === 'YFLUSD' && token0.symbol !== 'ETH' && token0.symbol !== 'LINK') {
+    if (
+      token1.symbol === 'ETH' ||
+      (token1.symbol === 'LINK' && token0.symbol !== 'ETH') ||
+      (token1.symbol === 'YFLUSD' && token0.symbol !== 'ETH' && token0.symbol !== 'LINK')
+    ) {
       token0 = position.pair.token1
       token1 = position.pair.token0
     }

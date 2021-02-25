@@ -137,9 +137,6 @@ function PairPage({ pairAddress, history }) {
     reserveB = reserve0
   }
 
-  console.log(tokenA, token0)
-  console.log(tokenB, token1)
-
   useEffect(() => {
     document.querySelector('body').scrollTo(0, 0)
   }, [])
