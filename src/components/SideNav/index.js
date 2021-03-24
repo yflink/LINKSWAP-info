@@ -169,7 +169,7 @@ function SideNav({ history }) {
               </Link>
             </HeaderText>
             <HeaderText>
-              <Link href="https://medium.com/yflink/" target="_blank">
+              <Link href="https://blog.yflink.io/" target="_blank">
                 Blog
               </Link>
             </HeaderText>
