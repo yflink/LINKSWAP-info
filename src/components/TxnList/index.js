@@ -280,43 +280,41 @@ function TxnList({ transactions, symbol0Override, symbol1Override, color }) {
   const below780 = useMedia('(max-width: 780px)')
 
   const ListItem = ({ item }) => {
-    if(item.token0Amount === null) {
+    if (item.token0Amount === null) {
       return true
     } else {
-
-    return (
-      <DashGrid style={{ height: '48px' }}>
-        <DataText area="txn" fontWeight="500">
-          <Link color={color} external href={urls.showTransaction(item.hash)}>
-            {getTransactionType(item.type, item.token1Symbol, item.token0Symbol)}
-          </Link>
-        </DataText>
-        <DataText area="value">
-          {currency === 'ETH' ? 'Ξ ' + formattedNum(item.valueETH) : formattedNum(item.amountUSD, true)}
-        </DataText>
-        {!below780 && (
-          <>
-            <DataText area="amountOther">
-              {formattedNum(item.token1Amount) + ' '}{' '}
-              <FormattedName text={item.token1Symbol} maxCharacters={5} margin={true} />
-            </DataText>
-            <DataText area="amountToken">
-              {formattedNum(item.token0Amount) + ' '}{' '}
-              <FormattedName text={item.token0Symbol} maxCharacters={5} margin={true} />
-            </DataText>
-          </>
-        )}
-        {!below1080 && (
-          <DataText area="account">
-            <Link color={color} external href={'https://etherscan.io/address/' + item.account}>
-              {item.account && item.account.slice(0, 6) + '...' + item.account.slice(38, 42)}
+      return (
+        <DashGrid style={{ height: '48px' }}>
+          <DataText area="txn" fontWeight="500">
+            <Link color={color} external href={urls.showTransaction(item.hash)}>
+              {getTransactionType(item.type, item.token1Symbol, item.token0Symbol)}
             </Link>
           </DataText>
-        )}
-        <DataText area="time">{formatTime(item.timestamp)}</DataText>
-      </DashGrid>
-    )
-
+          <DataText area="value">
+            {currency === 'ETH' ? 'Ξ ' + formattedNum(item.valueETH) : formattedNum(item.amountUSD, true)}
+          </DataText>
+          {!below780 && (
+            <>
+              <DataText area="amountOther">
+                {formattedNum(item.token1Amount) + ' '}{' '}
+                <FormattedName text={item.token1Symbol} maxCharacters={5} margin={true} />
+              </DataText>
+              <DataText area="amountToken">
+                {formattedNum(item.token0Amount) + ' '}{' '}
+                <FormattedName text={item.token0Symbol} maxCharacters={5} margin={true} />
+              </DataText>
+            </>
+          )}
+          {!below1080 && (
+            <DataText area="account">
+              <Link color={color} external href={'https://etherscan.io/address/' + item.account}>
+                {item.account && item.account.slice(0, 6) + '...' + item.account.slice(38, 42)}
+              </Link>
+            </DataText>
+          )}
+          <DataText area="time">{formatTime(item.timestamp)}</DataText>
+        </DashGrid>
+      )
     }
   }
 
